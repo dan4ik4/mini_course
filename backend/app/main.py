@@ -1,4 +1,7 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Depends
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+from app.core.db import get_db
 
 app = FastAPI(title="TheraAI")
 api = APIRouter(prefix="/api/v1")
@@ -6,6 +9,11 @@ api = APIRouter(prefix="/api/v1")
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/db-ping")
+def db_ping(db: Session = Depends(get_db)):
+    value = db.execute(text("select 1")).scalar_one()
+    return {"db": "ok", "value": value}
 
 # Заглушки auth
 @api.post("/auth/register")
