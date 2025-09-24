@@ -1,6 +1,6 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 # Берём доступы из переменных окружения (.env ты уже сделал)
 DB_HOST = os.getenv("DB_HOST", "localhost")
@@ -22,3 +22,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+class Base(DeclarativeBase):
+    pass
