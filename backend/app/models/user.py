@@ -9,6 +9,8 @@ from app.core.db import Base  # если у тебя Base лежит в core/db.
 
 import enum
 
+from datetime import datetime
+
 
 class UserRole(str, enum.Enum):
     user = "user"
@@ -30,4 +32,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
     role: Mapped[UserRole] = mapped_column(SAEnum(UserRole), default=UserRole.user, nullable=False)
 
-    created_at: Mapped = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )

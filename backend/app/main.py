@@ -1,49 +1,34 @@
-from fastapi import FastAPI, APIRouter, Depends
-from sqlalchemy import text
-from sqlalchemy.orm import Session
-from app.core.db import get_db
+from fastapi import FastAPI, APIRouter
+from app.auth.deps import (
+    fastapi_users, auth_backend,
+    UserRead, UserCreate, UserUpdate,
+)
 
 app = FastAPI(title="TheraAI")
+
+# заготовка под твои ручки (папки api нет — и не нужна)
 api = APIRouter(prefix="/api/v1")
 
-@app.get("/health")
-def health():
+@api.get("/health")
+async def health():
     return {"status": "ok"}
 
-@app.get("/db-ping")
-def db_ping(db: Session = Depends(get_db)):
-    value = db.execute(text("select 1")).scalar_one()
-    return {"db": "ok", "value": value}
-
-# Заглушки auth
-@api.post("/auth/register")
-def register():
-    return {"access_token": "demo", "refresh_token": "demo", "token_type": "bearer"}
-
-@api.post("/auth/login")
-def login():
-    return {"access_token": "demo", "refresh_token": "demo", "token_type": "bearer"}
-
-# Заглушки users
-@api.get("/users/me")
-def me():
-    return {"id": 1, "email": "user@example.com", "role": "user"}
-
-# Заглушки billing
-@api.get("/billing/plans")
-def plans():
-    return [
-        {"code": "free", "name": "Free"},
-        {"code": "start", "name": "Start"},
-        {"code": "premium", "name": "Premium"},
-    ]
-
-@api.post("/billing/subscribe")
-def subscribe():
-    return {"ok": True}
-
-@api.get("/billing/my")
-def my():
-    return {"plan": "free"}
-
+# подключаем заготовку
 app.include_router(api)
+
+# подключаем fastapi-users
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    prefix="/auth",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_users_router(UserRead, UserUpdate),
+    prefix="/users",
+    tags=["users"],
+)
