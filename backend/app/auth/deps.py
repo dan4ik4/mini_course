@@ -1,9 +1,8 @@
-# app/auth/deps.py
 import uuid
 from typing import AsyncGenerator
 
 from fastapi import Depends, HTTPException, status
-from fastapi_users import FastAPIUsers
+from fastapi_users import FastAPIUsers, schemas
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
@@ -18,7 +17,7 @@ from app.core.settings import settings
 from app.db.session import AsyncSessionLocal
 from app.models.user import User, UserRole
 
-
+from typing import Optional
 # ---------- session dep ----------
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
@@ -31,28 +30,23 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
 
 
 # ---------- pydantic схемы ----------
-class UserRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    id: uuid.UUID
-    email: EmailStr
-    is_active: bool
-    is_verified: bool
-    is_superuser: bool
+class UserRead(schemas.BaseUser[uuid.UUID]):
     role: UserRole
 
 
-class UserCreate(BaseModel):
+class UserCreate(schemas.BaseUserCreate):
     email: EmailStr
-    password: str  # захэшит fastapi-users
+    password: str
+    role: UserRole = UserRole.user
 
 
-class UserUpdate(BaseModel):
-    email: EmailStr | None = None
-    password: str | None = None
-    is_active: bool | None = None
-    is_verified: bool | None = None
-    is_superuser: bool | None = None
-    role: UserRole | None = None
+class UserUpdate(schemas.BaseUserUpdate):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    role: Optional[UserRole] = None
+    is_active: Optional[bool] = None
+    is_verified: Optional[bool] = None
+    is_superuser: Optional[bool] = None
 
 
 # ---------- user manager ----------
@@ -109,6 +103,7 @@ auth_backend = AuthenticationBackend(
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
+
 
 # ---------- FastAPI Users instance + deps ----------
 fastapi_users = FastAPIUsers[User, uuid.UUID](

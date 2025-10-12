@@ -1,4 +1,6 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Depends
+from app.auth.deps import fastapi_users, auth_backend, current_active_user
+from app.models.user import User
 from app.auth.deps import (
     fastapi_users, auth_backend,
     UserRead, UserCreate, UserUpdate,
@@ -32,3 +34,7 @@ app.include_router(
     prefix="/users",
     tags=["users"],
 )
+
+@app.get("/users/me", response_model=UserRead, tags=["users"])
+async def read_me(user: User = Depends(current_active_user)):
+    return user
