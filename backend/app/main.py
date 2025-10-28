@@ -6,10 +6,14 @@ from app.auth.deps import (
     UserRead, UserCreate, UserUpdate,
 )
 
+from app.routes import profile as profile_router
+
 app = FastAPI(title="TheraAI")
 
 # заготовка под твои ручки (папки api нет — и не нужна)
 api = APIRouter(prefix="/api/v1")
+
+app.include_router(profile_router.router)
 
 @api.get("/health")
 async def health():

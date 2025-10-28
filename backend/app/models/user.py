@@ -11,6 +11,9 @@ import enum
 
 from datetime import datetime
 
+from sqlalchemy.orm import relationship
+profile = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+
 
 class UserRole(str, enum.Enum):
     user = "user"

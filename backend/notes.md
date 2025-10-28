@@ -35,7 +35,15 @@ alembic upgrade head
 [x] Пересоздали миграцию users → теперь в upgrade() есть op.create_table
 [x] alembic upgrade head → таблица users в БД
 [x] create_owner_sql.py → успешно создан первый пользователь с ролью owner
-
+[x] Создан app/core/settings.py (pydantic-settings)  
+[x] Создан app/db/session.py (async engine + async_sessionmaker)  
+[x] Переписан app/models/user.py под fastapi-users (UUID PK, hashed_password, роли user/psychologist/owner, created_at)  
+реализована рабочая JWT-аутентификация через FastAPI Users;
+подключены эндпоинты /auth/register, /auth/jwt/login, /auth/jwt/logout, /users/me;
+исправлены миграции и структура таблицы users (UUID, hashed_password, роли, флаги активности);
+добавлены схемы UserRead, UserCreate, UserUpdate на основе BaseUser из fastapi-users;
+защищённые роуты теперь требуют Bearer-токен (без авторизации возвращают 401);
+проверено: регистрация → логин → авторизация → /users/me возвращает корректного юзера;
 
 ## Команды
 docker-compose up -d db
