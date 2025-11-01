@@ -24,6 +24,14 @@ class UserRole(str, enum.Enum):
 class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
 
+    profile = relationship(
+        "Profile",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     email: Mapped[str] = mapped_column(String(length=320), unique=True, index=True, nullable=False)

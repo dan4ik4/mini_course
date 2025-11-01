@@ -8,7 +8,7 @@ from app.crud.profile import ensure_for_user, update_for_user
 from app.core.db import get_db
 
 # подстрой этот импорт, если у тебя зависимость лежит в другом модуле
-from app.main import current_active_user as get_current_user
+from app.auth.deps import current_active_user as get_current_user
 
 
 router = APIRouter(prefix="/profile", tags=["profile"])
