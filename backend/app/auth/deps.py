@@ -61,39 +61,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 
-
-# ---------- JWT backend ----------
-#class SimpleJWTStrategy(Strategy[User, uuid.UUID]):
-#    def __init__(self, secret: str, lifetime_seconds: int = 3600):
-#        self.secret = secret
-#        self.lifetime_seconds = lifetime_seconds
-#
-#    async def write_token(self, user: User) -> str:
-#        data = {"sub": str(user.id)}
-#        return generate_jwt(data, self.secret, lifetime_seconds=self.lifetime_seconds)
-#
-#    async def read_token(self, token: str, request: Request | None = None) -> uuid.UUID | None:
-#        try:
-#            data = decode_jwt(token, self.secret)
-#            return uuid.UUID(data.get("sub"))
-#        except Exception:
-#            return None
-
-
-#def get_jwt_strategy() -> Strategy[User, uuid.UUID]:
-    # сутки
-#    return SimpleJWTStrategy(settings.JWT_SECRET, lifetime_seconds=60 * 60 * 24)
-
-
-#bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
-
-#auth_backend = AuthenticationBackend(
-#    name="jwt",
-#    transport=bearer_transport,
-#    get_strategy=get_jwt_strategy,
-#)
-
-bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")
+bearer_transport = BearerTransport(tokenUrl="/api/v1/auth/jwt/login")
 
 def get_jwt_strategy() -> JWTStrategy:
     return JWTStrategy(secret=settings.JWT_SECRET, lifetime_seconds=60 * 60 * 24)

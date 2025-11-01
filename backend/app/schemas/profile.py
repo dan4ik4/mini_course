@@ -1,6 +1,7 @@
 from typing import Optional
 from datetime import date
-from pydantic import BaseModel, HttpUrl, Field
+from pydantic import BaseModel, HttpUrl, Field, ConfigDict
+from uuid import UUID
 
 
 class ProfileBase(BaseModel):
@@ -14,13 +15,25 @@ class ProfileBase(BaseModel):
 
 
 class ProfileUpdate(ProfileBase):
-    """Данные для PATCH /profile/me"""
-    pass
+    display_name: Optional[str] = None
+    bio: Optional[str] = None
+    timezone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    phone: Optional[str] = None
+    telegram: Optional[str] = None
+    birth_date: Optional[date] = None
+    #pass
 
 
-class ProfileOut(ProfileBase):
+class ProfileOut(BaseModel):
     id: int
-    user_id: int
+    user_id: UUID
+    display_name: Optional[str] = None
+    bio: Optional[str] = None
+    timezone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    phone: Optional[str] = None
+    telegram: Optional[str] = None
+    birth_date: Optional[date] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

@@ -10,6 +10,8 @@ from app.core.db import get_db
 # подстрой этот импорт, если у тебя зависимость лежит в другом модуле
 from app.auth.deps import current_active_user as get_current_user
 
+from app.models.profile import Profile
+
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 
@@ -29,3 +31,16 @@ def patch_my_profile(
     current_user=Depends(get_current_user),
 ):
     return update_for_user(db, current_user.id, payload)
+
+@router.get("/__debug")
+def profile_debug(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    uid = current_user.id
+    count = db.query(Profile).filter(Profile.user_id == uid).count()
+    return {
+        "user_id": str(uid),
+        "user_id_type": str(type(uid)),
+        "profiles_by_user_id": count,
+    }
