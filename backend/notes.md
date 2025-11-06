@@ -44,6 +44,13 @@ alembic upgrade head
 добавлены схемы UserRead, UserCreate, UserUpdate на основе BaseUser из fastapi-users;
 защищённые роуты теперь требуют Bearer-токен (без авторизации возвращают 401);
 проверено: регистрация → логин → авторизация → /users/me возвращает корректного юзера;
+Исправлено подключение к PostgreSQL (ошибка 10061, Docker теперь стабильно активен).
+.env обновлён: DB_HOST=127.0.0.1, добавлен корректный DATABASE_URL.
+Добавлена одно-к-одному связь между User и Profile (user.profile, profile.user).
+Приведены типы (user_id → UUID), исправлены импорты в profile.py.
+Проверено: регистрация и логин работают, /api/v1/profile/me возвращает корректные данные.
+Swagger UI работает стабильно.
+Следующий шаг: реализовать PATCH /api/v1/profile/me (редактирование профиля) и DELETE /api/v1/users/me (удаление пользователя).
 
 ## Команды
 docker-compose up -d db
