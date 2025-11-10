@@ -5,9 +5,23 @@ from fastapi_users.manager import BaseUserManager
 from app.core.db import get_db
 from app.models.user import User
 # импортни ту зависимость, где у тебя fastapi_users.current_user(active=True)
-from app.auth.deps import current_active_user, get_user_manager # подгони путь при необходимости
+from app.auth.deps import current_active_user, get_user_manager, UserRead, UserUpdate # подгони путь при необходимости
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["users"])
+
+@router.get("/me", response_model=UserRead, status_code=status.HTTP_200_OK)
+async def read_me(user: User = Depends(current_active_user)):
+    return user
+
+
+@router.patch("/me", response_model=UserRead, status_code=status.HTTP_200_OK)
+async def patch_me(payload: UserUpdate, user: User = Depends(current_active_user)):
+    # ОБРЕЖЬ опасные поля, чтобы юзер сам себе не поднял права:
+    for field in ("role", "is_superuser", "is_verified"):
+        if getattr(payload, field, None) is not None:
+            setattr(payload, field, None)
+    return user
+            
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT, tags=["users"])
 async def delete_me(

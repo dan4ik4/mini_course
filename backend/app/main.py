@@ -13,7 +13,7 @@ app = FastAPI(
 )
 
 # единая точка подключения всех маршрутов
-app.include_router(api, prefix="/api/v1")
+app.include_router(api)
 
 # ——— мидлварь для логов исключений ———
 logger = logging.getLogger("uvicorn.error")
