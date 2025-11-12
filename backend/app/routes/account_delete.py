@@ -10,9 +10,11 @@ from sqlalchemy import select
 from app.auth.deps import get_async_session
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from app.core.security import hash_password
+from fastapi_users.password import PasswordHelper
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+password_helper = PasswordHelper()
 
 @router.get("/me", response_model=UserRead, status_code=status.HTTP_200_OK)
 async def read_me(user: User = Depends(current_active_user)):
@@ -38,10 +40,9 @@ async def update_me(
             raise HTTPException(status_code=409, detail="Email already in use")
         me.email = data.email
 
-    # 2) смена пароля (не забудь хэш)
     # 2) смена пароля (с хэшированием)
     if data.password:
-        me.hashed_password = hash_password(data.password)
+        me.hashed_password = password_helper.hash(data.password)
 
     # 3) сохранить
     await session.commit()
