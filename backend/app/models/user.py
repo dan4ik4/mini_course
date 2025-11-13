@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from app.db.session import engine
-
+from typing import Optional
 from app.core.db import Base  # если у тебя Base лежит в core/db.py
 
 import enum
@@ -12,6 +12,9 @@ import enum
 from datetime import datetime
 
 from sqlalchemy.orm import relationship
+
+from app.models.psychologist_profile import PsychologistProfile
+
 profile = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
 
 
@@ -47,4 +50,10 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         TIMESTAMP(timezone=True),
         server_default=func.now(),
         nullable=False
+    )
+
+    psychologist_profile: Mapped[Optional["PsychologistProfile"]] = relationship(
+    back_populates="user",
+    uselist=False,
+    cascade="all, delete-orphan",
     )

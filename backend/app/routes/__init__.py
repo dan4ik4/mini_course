@@ -6,7 +6,7 @@ from app.auth.deps import fastapi_users, auth_backend, UserRead, UserCreate
 # твои роутеры
 from app.routes import profile as profile_router
 from app.routes import account_delete
-
+from app.routes import psychologist_profile
 api = APIRouter(prefix="/api/v1")
 
 # health
@@ -32,3 +32,4 @@ api.include_router(
 # --- наши кастомные /users (me и {id}) ---
 # ВАЖНО: в app/routes/account_delete.py у router должен быть prefix="/users"
 api.include_router(account_delete.router)
+api.include_router(psychologist_profile.router)
