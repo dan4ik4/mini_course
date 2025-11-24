@@ -52,8 +52,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         nullable=False
     )
 
-    psychologist_profile: Mapped[Optional["PsychologistProfile"]] = relationship(
+    psychologist_profile = relationship(
+    "PsychologistProfile",
     back_populates="user",
     uselist=False,
-    cascade="all, delete-orphan",
     )

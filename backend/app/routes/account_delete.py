@@ -21,7 +21,7 @@ async def read_me(user: User = Depends(current_active_user)):
     return user
 
 class UserSelfUpdate(BaseModel):
-    email: Optional[EmailStr] = None
+    #email: Optional[EmailStr] = None
     password: Optional[str] = None
 
 
@@ -32,6 +32,15 @@ async def update_me(
     session: AsyncSession = Depends(get_async_session),
 ):
     # 1) смена email с проверкой уникальности
+    # if data.email is not None and data.email != me.email:
+    #     exists = await session.execute(
+    #         select(User.id).where(User.email == data.email, User.id != me.id)
+    #     )
+    #     if exists.scalar_one_or_none():
+    #         raise HTTPException(status_code=409, detail="Email already in use")
+    #     me.email = data.email
+
+        # 1) смена email с проверкой уникальности
     if data.email is not None and data.email != me.email:
         exists = await session.execute(
             select(User.id).where(User.email == data.email, User.id != me.id)

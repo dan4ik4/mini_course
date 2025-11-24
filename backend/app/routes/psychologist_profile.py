@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
 from app.auth.deps import get_async_session, require_role
 from app.models.user import User, UserRole
 from app.models.psychologist_profile import PsychologistProfile
@@ -38,7 +37,7 @@ async def get_my_psychologist_profile(
 
 
 # обновить свой психо-профиль
-@router.patch("/me", response_model=PsychologistProfileUpdate)
+@router.patch("/me", response_model=PsychologistProfileUpdate)#возможно надо будет вернуть out
 async def update_my_psychologist_profile(
     data: PsychologistProfileUpdate,
     session: AsyncSession = Depends(get_async_session),
