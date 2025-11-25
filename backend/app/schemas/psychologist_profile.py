@@ -17,7 +17,6 @@ class PsychologistProfileUpdate(PsychologistProfileBase):
     #license_number: Optional[str] = None
     price_per_hour: Optional[int] = None
     bio: Optional[str] = None
-    #pass
 
 
 class PsychologistProfileOut(PsychologistProfileBase):
@@ -27,4 +26,4 @@ class PsychologistProfileOut(PsychologistProfileBase):
     price_per_hour: Optional[int] = None
     bio: Optional[str] = None
     id: int
-    user_id: UUID  # UUID как строка
+    user_id: UUID

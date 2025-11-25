@@ -2,20 +2,14 @@ import os
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-
 from logging.config import fileConfig
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
 from dotenv import load_dotenv
-
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
-
 from app.core.db import Base
 import app.models.user 
-#import User
 
 target_metadata = Base.metadata
 

@@ -4,8 +4,7 @@ from uuid import UUID
 from fastapi_users.manager import BaseUserManager
 from app.core.db import get_db
 from app.models.user import User, UserRole
-# импортни ту зависимость, где у тебя fastapi_users.current_user(active=True)
-from app.auth.deps import current_active_user, get_user_manager, UserRead, UserUpdate # подгони путь при необходимости
+from app.auth.deps import current_active_user, get_user_manager, UserRead, UserUpdate
 from sqlalchemy import select
 from app.auth.deps import get_async_session
 from pydantic import BaseModel, EmailStr
@@ -24,7 +23,6 @@ class UserSelfUpdate(BaseModel):
     #email: Optional[EmailStr] = None
     password: Optional[str] = None
 
-
 @router.patch("/me", response_model=UserRead, summary="Update current user (self)")
 async def update_me(
     data: UserSelfUpdate,
@@ -39,15 +37,6 @@ async def update_me(
     #     if exists.scalar_one_or_none():
     #         raise HTTPException(status_code=409, detail="Email already in use")
     #     me.email = data.email
-
-        # 1) смена email с проверкой уникальности
-    if data.email is not None and data.email != me.email:
-        exists = await session.execute(
-            select(User.id).where(User.email == data.email, User.id != me.id)
-        )
-        if exists.scalar_one_or_none():
-            raise HTTPException(status_code=409, detail="Email already in use")
-        me.email = data.email
 
     # 2) смена пароля (с хэшированием)
     if data.password:

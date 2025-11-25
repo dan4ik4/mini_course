@@ -22,7 +22,6 @@ class ProfileUpdate(ProfileBase):
     phone: Optional[str] = None
     telegram: Optional[str] = None
     birth_date: Optional[date] = None
-    #pass
 
 
 class ProfileOut(BaseModel):

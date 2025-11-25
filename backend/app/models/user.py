@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from app.db.session import engine
 from typing import Optional
-from app.core.db import Base  # если у тебя Base лежит в core/db.py
+from app.core.db import Base
 
 import enum
 

@@ -4,10 +4,8 @@ from sqlalchemy.orm import Session
 from app.schemas.profile import ProfileOut, ProfileUpdate
 from app.crud.profile import ensure_for_user, update_for_user
 
-# подстрой этот импорт, если у тебя get_db в другом месте
 from app.core.db import get_db
 
-# подстрой этот импорт, если у тебя зависимость лежит в другом модуле
 from app.auth.deps import current_active_user as get_current_user
 
 from app.models.profile import Profile

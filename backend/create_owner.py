@@ -42,7 +42,7 @@ def main():
             email=email,
             password_hash=password_helper.hash(password),
             role=Role.OWNER,
-            is_active=True,
+            is_active=True\
         )
         s.add(u)
         s.commit()

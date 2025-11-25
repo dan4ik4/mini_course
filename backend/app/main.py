@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 import logging
 
-from app.routes import api  # собранный роутер из app/routes/__init__.py
+from app.routes import api
 
 app = FastAPI(
     title="TheraAI",
