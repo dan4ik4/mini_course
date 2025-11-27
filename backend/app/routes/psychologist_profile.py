@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.auth.deps import get_async_session, require_role
+from app.auth.deps import get_async_session
 from app.models.user import User, UserRole
 from app.models.psychologist_profile import PsychologistProfile
 from app.schemas.psychologist_profile import (
     PsychologistProfileOut,
     PsychologistProfileUpdate,
 )
+from app.auth.permissions import require_psychologist
 
 router = APIRouter(
     prefix="/psychologist",
@@ -19,7 +20,7 @@ router = APIRouter(
 @router.get("/me", response_model=PsychologistProfileOut)
 async def get_my_psychologist_profile(
     session: AsyncSession = Depends(get_async_session),
-    user: User = Depends(require_role(UserRole.psychologist)),
+    user: User = Depends(require_psychologist),
 ):
     result = await session.execute(
         select(PsychologistProfile).where(PsychologistProfile.user_id == user.id)
@@ -41,7 +42,7 @@ async def get_my_psychologist_profile(
 async def update_my_psychologist_profile(
     data: PsychologistProfileUpdate,
     session: AsyncSession = Depends(get_async_session),
-    user: User = Depends(require_role(UserRole.psychologist)),
+    user: User = Depends(require_psychologist),
 ):
     result = await session.execute(
         select(PsychologistProfile).where(PsychologistProfile.user_id == user.id)

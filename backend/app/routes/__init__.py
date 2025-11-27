@@ -1,10 +1,13 @@
 from fastapi import APIRouter
 
-from app.auth.deps import fastapi_users, auth_backend, UserRead, UserCreate
+from app.auth.deps import fastapi_users, auth_backend
 
 from app.routes import profile as profile_router
-from app.routes import account_delete
+from app.routes import users_me
+from app.routes import users_admin
 from app.routes import psychologist_profile
+from app.schemas.user import UserRead, UserCreate
+
 api = APIRouter(prefix="/api/v1")
 
 # health
@@ -12,7 +15,7 @@ api = APIRouter(prefix="/api/v1")
 async def health():
     return {"status": "ok"}
 
-# profile (оставляем как есть; у него свой prefix внутри)
+# profile
 api.include_router(profile_router.router)
 
 # --- auth из fastapi-users (логин/регистрация) ---
@@ -28,5 +31,6 @@ api.include_router(
 )
 
 # --- наши кастомные /users (me и {id}) ---
-api.include_router(account_delete.router)
+api.include_router(users_me.router)
+api.include_router(users_admin.router)
 api.include_router(psychologist_profile.router)

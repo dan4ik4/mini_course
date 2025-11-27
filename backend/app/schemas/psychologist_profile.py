@@ -12,18 +12,9 @@ class PsychologistProfileBase(BaseModel):
 
 
 class PsychologistProfileUpdate(PsychologistProfileBase):
-    #specialization: Optional[str] = None
-    experience_years: Optional[int] = None
-    #license_number: Optional[str] = None
-    price_per_hour: Optional[int] = None
-    bio: Optional[str] = None
+    pass
 
 
 class PsychologistProfileOut(PsychologistProfileBase):
-    specialization: Optional[str] = None
-    experience_years: Optional[int] = None
-    license_number: Optional[str] = None
-    price_per_hour: Optional[int] = None
-    bio: Optional[str] = None
     id: int
     user_id: UUID

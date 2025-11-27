@@ -1,8 +1,8 @@
 import uuid
 from typing import AsyncGenerator
 
-from fastapi import Depends, HTTPException, status
-from fastapi_users import FastAPIUsers, schemas
+from fastapi import Depends
+from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
@@ -11,13 +11,10 @@ from starlette.requests import Request
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from pydantic import BaseModel, EmailStr, ConfigDict
-
 from app.core.settings import settings
 from app.db.session import AsyncSessionLocal
-from app.models.user import User, UserRole
+from app.models.user import User
 
-from typing import Optional
 # ---------- session dep ----------
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
@@ -27,26 +24,6 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 # ---------- user db ----------
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
-
-
-# ---------- pydantic схемы ----------
-class UserRead(schemas.BaseUser[uuid.UUID]):
-    role: UserRole
-
-
-class UserCreate(schemas.BaseUserCreate):
-    email: EmailStr
-    password: str
-    role: UserRole = UserRole.user
-
-
-class UserUpdate(schemas.BaseUserUpdate):
-    email: Optional[EmailStr] = None
-    password: Optional[str] = None
-    role: Optional[UserRole] = None
-    is_active: Optional[bool] = None
-    is_verified: Optional[bool] = None
-    is_superuser: Optional[bool] = None
 
 
 # ---------- user manager ----------
@@ -80,15 +57,3 @@ fastapi_users = FastAPIUsers[User, uuid.UUID](
 )
 
 current_active_user = fastapi_users.current_user(active=True)
-current_superuser = fastapi_users.current_user(active=True, superuser=True)
-
-
-# простая проверка роли (owner как суперюзер пройдёт автоматически)
-def require_role(*allowed: UserRole):
-    async def dep(user: User = Depends(current_active_user)):
-        if user.is_superuser:
-            return user
-        if user.role not in allowed:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
-        return user
-    return dep
