@@ -2,15 +2,15 @@ from alembic import op
 import sqlalchemy as sa
 from fastapi_users_db_sqlalchemy.generics import GUID
 
-revision = 'XXXX_initial'
+# revision identifiers, used by Alembic.
+revision = 'b753a375f3e8'
 down_revision = None
 branch_labels = None
 depends_on = None
-user_role_enum = sa.Enum('user', 'psychologist', 'owner', name='userrole')
-user_role_enum.create(op.get_bind())
 
 
 def upgrade() -> None:
+    # SQLAlchemy сам создаёт ENUM при создании таблицы users.
     op.create_table(
         'users',
         sa.Column('id', GUID(), primary_key=True),
@@ -19,7 +19,12 @@ def upgrade() -> None:
         sa.Column('is_active', sa.Boolean(), nullable=False, server_default='true'),
         sa.Column('is_superuser', sa.Boolean(), nullable=False, server_default='false'),
         sa.Column('is_verified', sa.Boolean(), nullable=False, server_default='false'),
-        sa.Column('role', sa.Enum('user', 'psychologist', 'owner', name='userrole'), nullable=False, server_default='user'),
+        sa.Column(
+            'role',
+            sa.Enum('user', 'psychologist', 'owner', name='userrole'),
+            nullable=False,
+            server_default='user'
+        ),
         sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 
@@ -52,3 +57,6 @@ def downgrade() -> None:
     op.drop_table('psychologist_profile')
     op.drop_table('profiles')
     op.drop_table('users')
+
+    # ENUM удаляется только если существует — безопасно
+    op.execute("DROP TYPE IF EXISTS userrole")

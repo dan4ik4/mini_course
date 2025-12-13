@@ -57,3 +57,56 @@ docker-compose up -d db
 python backend/db_ping.py
 alembic revision -m "create users" --autogenerate
 alembic upgrade head
+
+357a3c2a-2d89-4440-8022-f141ff265268
+0d1f49fd-e6dc-4bf5-bf78-79874e47d8f9
+d9146898-fa46-4f63-90e3-b850754d3c9b
+
+
+
+"""add sessions table
+
+Revision ID: db3285631796
+Revises: XXXX_initial
+Create Date: 2025-12-04 17:40:28.681466
+
+"""
+from typing import Sequence, Union
+
+from alembic import op
+import sqlalchemy as sa
+from fastapi_users_db_sqlalchemy.generics import GUID
+
+# revision identifiers, used by Alembic.
+revision: str = 'db3285631796'
+down_revision: Union[str, Sequence[str], None] = 'b753a375f3e8'
+branch_labels: Union[str, Sequence[str], None] = None
+depends_on: Union[str, Sequence[str], None] = None
+
+
+def upgrade() -> None:
+    op.execute("""
+    CREATE TYPE sessionstatus AS ENUM (
+        'requested',
+        'approved',
+        'rejected',
+        'canceled',
+        'finished'
+    )
+""")
+
+op.create_table(
+    'sessions',
+    sa.Column('id', GUID(), primary_key=True),
+    sa.Column('user_id', GUID(), sa.ForeignKey('users.id', ondelete='CASCADE'), nullable=False),
+    sa.Column('psychologist_id', GUID(), sa.ForeignKey('users.id', ondelete='CASCADE'), nullable=False),
+    sa.Column('scheduled_at', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('status', sa.Enum(name="sessionstatus"), nullable=False, server_default='requested'),
+    sa.Column('jitsi_url', sa.String(length=512), nullable=True),
+    sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.func.now(), nullable=False),
+)
+
+
+def downgrade() -> None:
+    op.drop_table('sessions')
+op.execute("DROP TYPE sessionstatus")
