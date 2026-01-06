@@ -1,0 +1,24 @@
+# env
+.env
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# virtualenv
+.venv/
+venv/
+env/
+
+# alembic
+alembic/versions/__pycache__/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -22,7 +22,7 @@ class Profile(Base):
     timezone = Column(String(64))
     avatar_url = Column(String(512))
     phone = Column(String(32))
-    telegram = Column(String(64))
+    faculty = Column(String(64))
     birth_date = Column(Date)
 
     user = relationship("User", back_populates="profile", uselist=False)

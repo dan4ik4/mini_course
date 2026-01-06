@@ -14,7 +14,7 @@ from fastapi_users.password import PasswordHelper
 
 # берём те же переменные, что и в .env
 host = os.getenv("DB_HOST", "localhost")
-port = os.getenv("DB_PORT", "5432")
+port = os.getenv("DB_PORT", "5342")
 name = os.getenv("DB_NAME", "app")
 user = os.getenv("DB_USER", "app")
 pwd  = os.getenv("DB_PASS", "app")
@@ -24,7 +24,7 @@ print("DB_URL =", url)
 
 engine = create_engine(url, future=True)
 
-from app.models.user import User, Role
+from app.models.user import User, UserRole
 
 password_helper = PasswordHelper()
 
@@ -41,7 +41,7 @@ def main():
         u = User(
             email=email,
             password_hash=password_helper.hash(password),
-            role=Role.OWNER,
+            role=UserRole.owner,
             is_active=True\
         )
         s.add(u)

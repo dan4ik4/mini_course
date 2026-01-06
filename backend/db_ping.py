@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).with_name(".env"))
 
 host = os.getenv("DB_HOST", "localhost")
-port = os.getenv("DB_PORT", "5432")
+port = os.getenv("DB_PORT", "5342")
 name = os.getenv("DB_NAME", "app")
 user = os.getenv("DB_USER", "app")
 pwd  = os.getenv("DB_PASS", "app")

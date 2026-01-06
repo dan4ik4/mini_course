@@ -13,19 +13,19 @@ def require_owner(user: User = Depends(current_active_user)) -> User:
     return user
 
 
-def require_psychologist(user: User = Depends(current_active_user)) -> User:
-    if user.role != UserRole.psychologist:
+def require_teacher(user: User = Depends(current_active_user)) -> User:
+    if user.role != UserRole.teacher:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not enough permissions (psychologist only)",
+            detail="Not enough permissions (teacher only)",
         )
     return user
 
 
-def require_owner_or_psychologist(user: User = Depends(current_active_user)) -> User:
-    if user.role not in (UserRole.psychologist, UserRole.owner):
+def require_owner_or_teacher(user: User = Depends(current_active_user)) -> User:
+    if user.role not in (UserRole.teacher, UserRole.owner):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not enough permissions (owner or psychologist required)",
+            detail="Not enough permissions (owner or teacher required)",
         )
     return user

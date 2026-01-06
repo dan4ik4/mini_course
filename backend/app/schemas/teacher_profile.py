@@ -3,7 +3,7 @@ from typing import Optional
 from uuid import UUID
 
 
-class PsychologistProfileBase(BaseModel):
+class TeacherProfileBase(BaseModel):
     specialization: Optional[str] = Field(None, max_length=255)
     experience_years: Optional[int] = None
     license_number: Optional[str] = Field(None, max_length=255)
@@ -11,10 +11,10 @@ class PsychologistProfileBase(BaseModel):
     bio: Optional[str] = None
 
 
-class PsychologistProfileUpdate(PsychologistProfileBase):
+class TeacherProfileUpdate(TeacherProfileBase):
     pass
 
 
-class PsychologistProfileOut(PsychologistProfileBase):
+class TeacherProfileOut(TeacherProfileBase):
     id: int
     user_id: UUID

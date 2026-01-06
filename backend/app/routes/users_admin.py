@@ -6,12 +6,12 @@ from sqlalchemy import select
 from app.auth.deps import get_async_session
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from app.auth.permissions import require_owner, require_owner_or_psychologist
+from app.auth.permissions import require_owner, require_owner_or_teacher
 from app.schemas.user import UserRead, UserAdminUpdate
 
 router = APIRouter(prefix="/users", tags=["admin-users"])
 
-@router.get("/{id}", response_model=UserRead, summary="Get user by id (psychologist/owner)")
+@router.get("/{id}", response_model=UserRead, summary="Get user by id (teacher/owner)")
 async def get_user_by_id(
     id: UUID,
     _: User = Depends(require_owner_or_psychologist),

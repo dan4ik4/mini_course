@@ -5,8 +5,8 @@ from sqlalchemy.orm import relationship
 from app.core.db import Base
 
 
-class PsychologistProfile(Base):
-    __tablename__ = "psychologist_profile"
+class TeacherProfile(Base):
+    __tablename__ = "teacher_profile"
 
     id = Column(Integer, primary_key=True)
 
@@ -20,12 +20,10 @@ class PsychologistProfile(Base):
 
     user = relationship(
     "User",
-    back_populates="psychologist_profile",
+    back_populates="teacher_profile",
     passive_deletes=True,
 )
 
     specialization = Column(String(255))
     experience_years = Column(Integer)
-    license_number = Column(String(255))
-    price_per_hour = Column(Integer)
     bio = Column(Text)

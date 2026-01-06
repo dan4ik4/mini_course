@@ -21,7 +21,7 @@ def upgrade() -> None:
         sa.Column('is_verified', sa.Boolean(), nullable=False, server_default='false'),
         sa.Column(
             'role',
-            sa.Enum('user', 'psychologist', 'owner', name='userrole'),
+            sa.Enum('user', 'teacher', 'owner', name='userrole'),
             nullable=False,
             server_default='user'
         ),
@@ -34,27 +34,24 @@ def upgrade() -> None:
         sa.Column('user_id', GUID(), sa.ForeignKey('users.id', ondelete="CASCADE"), nullable=False),
         sa.Column('display_name', sa.String(length=120)),
         sa.Column('bio', sa.Text()),
-        sa.Column('timezone', sa.String(length=64)),
         sa.Column('avatar_url', sa.String(length=512)),
         sa.Column('phone', sa.String(length=32)),
-        sa.Column('telegram', sa.String(length=64)),
+        sa.Column('faculty', sa.String(length=64)),
         sa.Column('birth_date', sa.Date()),
     )
 
     op.create_table(
-        'psychologist_profile',
+        'teacher_profile',
         sa.Column('id', sa.Integer(), primary_key=True),
         sa.Column('user_id', GUID(), sa.ForeignKey('users.id', ondelete="CASCADE"), nullable=False),
         sa.Column('specialization', sa.String(length=255)),
         sa.Column('experience_years', sa.Integer()),
-        sa.Column('license_number', sa.String(length=255)),
-        sa.Column('price_per_hour', sa.Integer()),
         sa.Column('bio', sa.Text()),
     )
 
 
 def downgrade() -> None:
-    op.drop_table('psychologist_profile')
+    op.drop_table('teacher_profile')
     op.drop_table('profiles')
     op.drop_table('users')
 

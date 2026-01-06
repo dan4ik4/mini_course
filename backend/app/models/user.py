@@ -17,7 +17,7 @@ profile = relationship("Profile", back_populates="user", uselist=False, cascade=
 
 class UserRole(str, enum.Enum):
     user = "user"
-    psychologist = "psychologist"
+    teacher = "teacher"
     owner = "owner"
 
 
@@ -49,8 +49,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         nullable=False
     )
 
-    psychologist_profile = relationship(
-    "PsychologistProfile",
+    teacher_profile = relationship(
+    "TeacherProfile",
     back_populates="user",
     uselist=False,
     cascade="all, delete-orphan",

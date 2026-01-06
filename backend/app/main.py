@@ -5,14 +5,13 @@ import logging
 from app.routes import api
 
 app = FastAPI(
-    title="TheraAI",
+    title="mini_course",
     version="0.1.0",
     docs_url="/docs",
     openapi_url="/openapi.json",
     debug=True,
 )
 
-# единая точка подключения всех маршрутов
 app.include_router(api)
 
 # ——— мидлварь для логов исключений ———
