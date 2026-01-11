@@ -14,7 +14,7 @@ router = APIRouter(prefix="/users", tags=["admin-users"])
 @router.get("/{id}", response_model=UserRead, summary="Get user by id (teacher/owner)")
 async def get_user_by_id(
     id: UUID,
-    _: User = Depends(require_owner_or_psychologist),
+    _: User = Depends(require_owner_or_teacher),
     session: AsyncSession = Depends(get_async_session),
 ):
     stmt = select(User).where(User.id == id)

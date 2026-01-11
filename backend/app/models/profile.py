@@ -19,7 +19,6 @@ class Profile(Base):
 
     display_name = Column(String(120))
     bio = Column(Text)
-    timezone = Column(String(64))
     avatar_url = Column(String(512))
     phone = Column(String(32))
     faculty = Column(String(64))

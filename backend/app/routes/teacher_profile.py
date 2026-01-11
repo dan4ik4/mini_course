@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.auth.deps import get_async_session
 from app.models.user import User, UserRole
-from backend.app.models.teacher_profile import TeacherProfile
+from app.models.teacher_profile import TeacherProfile
 from app.schemas.teacher_profile import (
     TeacherProfileOut,
     TeacherProfileUpdate,

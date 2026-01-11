@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config, pool
 from app.core.db import Base
 import app.models.user
 import app.models.profile
-import backend.app.models.teacher_profile
+import app.models.teacher_profile
 
 config = context.config
 
