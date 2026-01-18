@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi_users.manager import BaseUserManager
 from app.models.user import User
 from app.auth.deps import current_active_user, get_user_manager
-from app.auth.deps import get_async_session
+from app.db.session import get_db
 from pydantic import BaseModel
 from typing import Optional
 from fastapi_users.password import PasswordHelper
@@ -25,7 +25,7 @@ class UserSelfUpdate(BaseModel):
 async def update_me(
     data: UserUpdateSelf,
     me: User = Depends(current_active_user),
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
 ):
     if data.password:
         me.hashed_password = password_helper.hash(data.password)

@@ -3,7 +3,7 @@ from sqlalchemy import String, Boolean, TIMESTAMP, func, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
-from app.core.db import Base
+from app.db.base import Base
 
 import enum
 

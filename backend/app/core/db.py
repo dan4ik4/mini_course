@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 
 DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "55342")
+DB_PORT = os.getenv("DB_PORT", "15342")
 DB_NAME = os.getenv("DB_NAME", "app")
 DB_USER = os.getenv("DB_USER", "app")
 DB_PASS = os.getenv("DB_PASS", "app")

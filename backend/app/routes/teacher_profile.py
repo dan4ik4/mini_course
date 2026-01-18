@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.auth.deps import get_async_session
+
+from app.db.session import get_db
 from app.models.user import User, UserRole
 from app.models.teacher_profile import TeacherProfile
 from app.schemas.teacher_profile import (
@@ -19,7 +20,7 @@ router = APIRouter(
 # получить свой психо-профиль
 @router.get("/me", response_model=TeacherProfileOut)
 async def get_my_teacher_profile(
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
     user: User = Depends(require_teacher),
 ):
     result = await session.execute(
@@ -41,7 +42,7 @@ async def get_my_teacher_profile(
 @router.patch("/me", response_model=TeacherProfileUpdate)#возможно надо будет вернуть out
 async def update_my_teacher_profile(
     data: TeacherProfileUpdate,
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
     user: User = Depends(require_teacher),
 ):
     result = await session.execute(

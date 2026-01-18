@@ -6,6 +6,8 @@ from app.routes import profile as profile_router
 from app.routes import users_me
 from app.routes import users_admin
 from app.routes import teacher_profile
+from app.routes import offers
+from app.routes import subject
 from app.schemas.user import UserRead, UserCreate
 
 api = APIRouter(prefix="/api/v1")
@@ -34,3 +36,5 @@ api.include_router(
 api.include_router(users_me.router)
 api.include_router(users_admin.router)
 api.include_router(teacher_profile.router)
+api.include_router(offers.router)
+api.include_router(subject.router)

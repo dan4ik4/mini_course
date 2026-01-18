@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
 from app.models.user import User, UserRole
 from sqlalchemy import select
-from app.auth.deps import get_async_session
+from app.db.session import get_db
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from app.auth.permissions import require_owner, require_owner_or_teacher
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/users", tags=["admin-users"])
 async def get_user_by_id(
     id: UUID,
     _: User = Depends(require_owner_or_teacher),
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
 ):
     stmt = select(User).where(User.id == id)
     res = await session.execute(stmt)
@@ -34,7 +34,7 @@ async def update_user_by_id(
     id: UUID,
     data: UserAdminUpdate,
     _: User = Depends(require_owner),
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
 ):
     res = await session.execute(select(User).where(User.id == id))
     user = res.scalar_one_or_none()
@@ -62,7 +62,7 @@ async def update_user_by_id(
 async def delete_user_by_id(
     id: UUID,
     _: User = Depends(require_owner),
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_db),
 ):
     res = await session.execute(select(User).where(User.id == id))
     user = res.scalar_one_or_none()

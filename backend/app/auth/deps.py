@@ -12,17 +12,11 @@ from starlette.requests import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.settings import settings
-from app.db.session import AsyncSessionLocal
 from app.models.user import User
-
-# ---------- session dep ----------
-async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSessionLocal() as session:
-        yield session
-
+from app.db.session import get_db
 
 # ---------- user db ----------
-async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+async def get_user_db(session: AsyncSession = Depends(get_db)):
     yield SQLAlchemyUserDatabase(session, User)
 
 

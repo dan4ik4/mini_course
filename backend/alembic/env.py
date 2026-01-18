@@ -5,10 +5,14 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from app.core.db import Base
+from app.db.base import Base
 import app.models.user
 import app.models.profile
 import app.models.teacher_profile
+from app.models.subject import Subject  # noqa: F401
+from app.models.offer import Offer      # noqa: F401
+from app.models.lesson import Lesson    # noqa: F401
+
 
 config = context.config
 

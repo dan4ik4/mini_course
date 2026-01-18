@@ -16,5 +16,5 @@ class TeacherProfileUpdate(TeacherProfileBase):
 
 
 class TeacherProfileOut(TeacherProfileBase):
-    id: int
+    id: UUID
     user_id: UUID

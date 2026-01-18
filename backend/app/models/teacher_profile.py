@@ -2,7 +2,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, ForeignKey, String, Integer, Text
 from sqlalchemy.orm import relationship
 
-from app.core.db import Base
+from app.db.base import Base
 
 
 class TeacherProfile(Base):

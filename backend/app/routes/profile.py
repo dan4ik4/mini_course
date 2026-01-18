@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.schemas.profile import ProfileOut, ProfileUpdate
 from app.crud.profile import ensure_for_user, update_for_user
 
-from app.core.db import get_db
+from app.db.session import get_db
 
 from app.auth.deps import current_active_user as get_current_user
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/profile", tags=["profile"])
 
 
 @router.get("/me", response_model=ProfileOut)
-def read_my_profile(
+async def read_my_profile(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -23,7 +23,7 @@ def read_my_profile(
 
 
 @router.patch("/me", response_model=ProfileOut)
-def patch_my_profile(
+async def patch_my_profile(
     payload: ProfileUpdate,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -31,7 +31,7 @@ def patch_my_profile(
     return update_for_user(db, current_user.id, payload)
 
 @router.get("/__debug")
-def profile_debug(
+async def profile_debug(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user),
 ):
